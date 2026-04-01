@@ -9,208 +9,312 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
-        
+
+        *, *::before, *::after { box-sizing: border-box; }
         html { scroll-behavior: smooth; font-family: 'Montserrat', sans-serif; }
         .serif-font { font-family: 'Playfair Display', serif; }
-        
+
         :root {
             --brand-cream: #FDFBF7;
             --brand-gold: #D4AF37;
             --brand-dark: #1A1A1A;
         }
 
-        body { background-color: var(--brand-cream); color: var(--brand-dark); }
+        body { background-color: var(--brand-cream); color: var(--brand-dark); margin: 0; }
 
-        .gold-gradient-text { 
-            background: linear-gradient(90deg, #D4AF37, #F1D592); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
+        .gold-gradient-text {
+            background: linear-gradient(90deg, #D4AF37, #F1D592);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        .bg-pattern { 
+
+        .bg-pattern {
             background-image: radial-gradient(var(--brand-gold) 0.5px, transparent 0.5px);
             background-size: 30px 30px;
-            opacity: 0.03;
+            opacity: 0.04;
         }
 
         .hover-lift { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .hover-lift:hover { transform: translateY(-10px); border-color: var(--brand-gold); }
+        .hover-lift:hover { transform: translateY(-8px); border-color: var(--brand-gold) !important; }
 
-        /* Custom Logo Sizing */
-        .zoom-logo { overflow: hidden; background-color: white; border: 1px solid rgba(212, 175, 55, 0.1); }
-        .zoom-logo img { object-fit: contain; transform: scale(1.1); width: 100%; height: 100%; }
+        .zoom-logo { overflow: hidden; background-color: white; border: 1px solid rgba(212,175,55,0.15); }
+        .zoom-logo img { object-fit: contain; transform: scale(1.1); width: 100%; height: 100%; display: block; }
 
+        /* Mobile menu hidden by default */
         #mobile-menu { display: none; }
-        #mobile-menu.active { display: block !important; }
+        #mobile-menu.active { display: block; }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.1);
+        /* Stat divider */
+        .stat-item:not(:last-child) {
+            border-right: 1px solid #e5e7eb;
+            padding-right: 1.5rem;
+        }
+        .stat-item { padding-left: 1.5rem; }
+        .stat-item:first-child { padding-left: 0; }
+
+        @media (max-width: 640px) {
+            .stat-item:not(:last-child) { border-right: none; padding-right: 0; }
+            .stat-item { padding-left: 0; }
+        }
+
+        /* Doctor image responsive */
+        .doctor-img {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            border-radius: 40px;
+            border: 10px solid white;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+            display: block;
+        }
+
+        .text-gold { color: var(--brand-gold); }
+        .bg-gold { background-color: var(--brand-gold); }
+        .border-gold { border-color: var(--brand-gold); }
+
+        .cta-btn-primary {
+            display: inline-block;
+            background: var(--brand-gold);
+            color: #000;
+            padding: 1.1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+        .cta-btn-primary:hover { background: #000; color: #fff; }
+
+        .cta-btn-secondary {
+            display: inline-block;
+            border: 1.5px solid #000;
+            color: #000;
+            padding: 1.1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+        .cta-btn-secondary:hover { background: #000; color: #fff; }
+
+        /* Specialization cards */
+        .spec-card {
+            background: var(--brand-cream);
+            border: 1px solid rgba(212,175,55,0.15);
+            border-radius: 40px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+        }
+
+        .spec-icon {
+            width: 72px;
+            height: 72px;
+            background: white;
+            color: var(--brand-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full zoom-logo shadow-sm">
+    <nav style="background: rgba(255,255,255,0.93); backdrop-filter: blur(12px); border-bottom: 1px solid #f1f1f1; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 8px rgba(0,0,0,0.04);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; height: 72px; display: flex; align-items: center; justify-content: space-between;">
+            
+            <a href="index.html" style="display: flex; align-items: center; gap: 14px; text-decoration: none;">
+                <div class="zoom-logo" style="width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;">
                     <img src="https://lh3.googleusercontent.com/p/AF1QipNWrdsRb9N3Xpi5iYSslJft3W3Ue1CP6VMQiMhA=s680-w680-h510-rw" alt="Skinnergy Logo">
                 </div>
-                <div class="flex flex-col">
-                    <span class="serif-font font-bold text-xl tracking-tight uppercase text-gray-900 leading-none">Skinnergy</span>
-                    <span class="text-[8px] font-bold tracking-[0.3em] text-gray-400 uppercase mt-1">Cosmetic Care</span>
+                <div style="display: flex; flex-direction: column;">
+                    <span class="serif-font" style="font-weight: 700; font-size: 1.15rem; letter-spacing: 0.05em; text-transform: uppercase; color: #111; line-height: 1;">Skinnergy</span>
+                    <span style="font-size: 0.5rem; font-weight: 700; letter-spacing: 0.3em; color: #aaa; text-transform: uppercase; margin-top: 4px;">Cosmetic Care</span>
                 </div>
             </a>
 
-            <div class="hidden lg:flex items-center gap-10 text-[10px] font-bold uppercase tracking-widest text-gray-500">
-            <a href="index.html" class="hover:text-black transition-colors">Home</a>
-            <a href="about.html" class="hover:text-black transition-colors">The Specialist</a>
-            <a href="treatments.html" class="hover:text-black transition-colors">Treatments</a>
-            <a href="results.html" class="hover:text-black transition-colors">Smile Stories</a>
+            <div style="display: flex; align-items: center; gap: 2.5rem;" class="desktop-nav">
+                <a href="index.html" style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; text-decoration: none;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#555'">Home</a>
+                <a href="about.html" style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #000; text-decoration: none;">The Specialist</a>
+                <a href="treatments.html" style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; text-decoration: none;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#555'">Treatments</a>
+                <a href="results.html" style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; text-decoration: none;" onmouseover="this.style.color='#000'" onmouseout="this.style.color='#555'">Smile Stories</a>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="index.html#booking" class="cta-btn-primary" style="max-width: unset; width: auto; padding: 0.75rem 1.75rem; display: none;" id="nav-cta">Book Consult</a>
+                <button id="menu-btn" style="background: none; border: none; cursor: pointer; padding: 8px; color: #111;" aria-label="Open menu">
+                    <i class="fas fa-bars text-xl" id="menu-icon"></i>
+                </button>
+            </div>
         </div>
 
-            <div class="flex items-center gap-4">
-                <a href="index.html#booking" class="bg-brand-dark text-gold px-8 py-3 rounded-full font-bold hover:bg-gold-gradient shadow-lg text-[10px] transition-all uppercase tracking-widest hidden md:block">
-                    Book Consult
-                </a>
-                <button id="menu-btn" class="lg:hidden text-gray-900 p-2">
-                    <i class="fas fa-bars-staggered text-xl" id="menu-icon"></i>
-                </button>
+        <div id="mobile-menu" style="background: white; border-top: 1px solid #f1f1f1; padding: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="index.html" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; text-decoration: none; padding: 0.5rem 0;">Home</a>
+                <a href="about.html" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #D4AF37; text-decoration: none; padding: 0.5rem 0;">The Specialist</a>
+                <a href="treatments.html" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; text-decoration: none; padding: 0.5rem 0;">Treatments</a>
+                <a href="results.html" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #555; text-decoration: none; padding: 0.5rem 0;">Smile Stories</a>
+                <a href="index.html#booking" class="cta-btn-primary" style="margin-top: 0.5rem; max-width: 100%;">Book Consult</a>
             </div>
         </div>
     </nav>
 
-    <section class="py-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-pattern"></div>
-        <div class="max-w-7xl mx-auto px-6 relative flex flex-col lg:flex-row items-center gap-20">
+    <section style="padding: 5rem 1.5rem; position: relative; overflow: hidden;">
+        <div class="bg-pattern" style="position: absolute; inset: 0; pointer-events: none;"></div>
+        
+        <div style="max-width: 1200px; margin: 0 auto; position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 4rem;">
             
-            <div class="lg:w-1/2">
-                <div class="relative group">
-                    <img src="https://github.com/AnujAhinave/dr-sdosnam/blob/main/ChatGPT%20Image%20Apr%201%2C%202026%2C%2006_04_01%20PM.jpg?raw=true" 
-                         class="rounded-[40px] shadow-2xl border-[12px] border-white relative z-10 w-full max-w-lg mx-auto" alt="Dr. Sonam Bhatia">
-                    
-                   
-                            </div>
-                            <div>
-                              .
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div style="flex: 1 1 320px; display: flex; justify-content: center;">
+                <img 
+                    src="https://github.com/AnujAhinave/dr-sdosnam/blob/main/ChatGPT%20Image%20Apr%201%2C%202026%2C%2006_04_01%20PM.jpg?raw=true"
+                    alt="Dr. Sonam Bhatia"
+                    class="doctor-img"
+                >
             </div>
 
-            <div class="lg:w-1/2 text-center lg:text-left">
-                <h2 class="text-gold font-bold uppercase tracking-[0.3em] text-[10px] mb-4">Lead Aesthetic Physician</h2>
-                <h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-tight tracking-tight serif-font">
-                    Dr. <span class="gold-gradient-text italic">Sonam Bhatia</span>
+            <div style="flex: 1 1 340px; text-align: left;">
+                <p style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--brand-gold); margin-bottom: 1rem;">Lead Aesthetic Physician</p>
+                
+                <h1 class="serif-font" style="font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 700; line-height: 1.1; color: #111; margin: 0 0 1.5rem;">
+                    Dr. <span class="gold-gradient-text" style="font-style: italic;">Sonam Bhatia</span>
                 </h1>
-                
-                <div class="mt-6 space-y-2">
-                    <p class="text-sm font-bold uppercase tracking-widest text-gray-600">M.B.B.S | Diploma In Dermatology (UK)</p>
-                    <p class="text-xs font-semibold text-gold uppercase tracking-[0.2em]">Medical Director of Skinnergy Cosmetic Care</p>
-                </div>
 
-                <p class="text-lg text-gray-600 mt-10 leading-relaxed font-light">
-                    Dr. Sonam Bhatia is a distinguished Aesthetic Physician specializing in advanced dermatology and cosmetic enhancements. With over a decade of clinical experience, she is dedicated to blending medical science with artistic precision to deliver natural-looking, transformative results.
+                <p style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #555; margin-bottom: 0.4rem;">M.B.B.S | Diploma In Dermatology (UK)</p>
+                <p style="font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brand-gold); margin-bottom: 2rem;">Medical Director of Skinnergy Cosmetic Care</p>
+
+                <p style="font-size: 1rem; color: #666; line-height: 1.8; font-weight: 300; margin-bottom: 1.2rem;">
+                    Dr. Sonam Bhatia is a distinguished Aesthetic Physician specializing in advanced dermatology and cosmetic enhancements. With over a decade of clinical experience, she blends medical science with artistic precision to deliver natural-looking, transformative results.
                 </p>
-                
-                <p class="text-lg text-gray-600 mt-4 leading-relaxed font-light">
-                    Known for her empathetic approach, Dr. Sonam ensures each patient receives a personalized treatment plan—whether treating complex medical skin conditions or performing advanced aesthetic procedures like Botox, Fillers, and Laser Toning.
+                <p style="font-size: 1rem; color: #666; line-height: 1.8; font-weight: 300; margin-bottom: 2.5rem;">
+                    Known for her empathetic approach, Dr. Sonam ensures each patient receives a personalized treatment plan — from complex medical skin conditions to advanced aesthetic procedures like Botox, Fillers, and Laser Toning.
                 </p>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 border-t border-gray-100 pt-10">
+                <div style="border-top: 1px solid #e5e7eb; padding-top: 2rem; display: flex; flex-wrap: wrap; gap: 2rem;">
                     <div>
-                        <h4 class="text-3xl font-bold text-gray-900">4.8</h4>
-                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold mt-2">Google Star Rating</p>
+                        <h4 style="font-size: 2rem; font-weight: 700; color: #111; margin: 0 0 6px;">4.8★</h4>
+                        <p style="font-size: 0.55rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #aaa; margin: 0;">Google Rating</p>
                     </div>
                     <div>
-                        <h4 class="text-3xl font-bold text-gray-900">100%</h4>
-                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold mt-2">Sterile Protocols</p>
+                        <h4 style="font-size: 2rem; font-weight: 700; color: #111; margin: 0 0 6px;">100%</h4>
+                        <p style="font-size: 0.55rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #aaa; margin: 0;">Sterile Protocols</p>
                     </div>
                     <div>
-                        <h4 class="text-3xl font-bold text-gray-900">UK</h4>
-                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold mt-2">Certified Training</p>
+                        <h4 style="font-size: 2rem; font-weight: 700; color: #111; margin: 0 0 6px;">UK</h4>
+                        <p style="font-size: 0.55rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #aaa; margin: 0;">Certified Training</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-white px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20">
-                <h2 class="text-3xl font-bold text-gray-900 uppercase tracking-tight serif-font">Professional Specialization</h2>
-                <div class="h-1 w-20 bg-gold mx-auto mt-4"></div>
+    <section style="padding: 5rem 1.5rem; background: white;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <h2 class="serif-font" style="font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Professional Specialization</h2>
+                <div style="width: 60px; height: 3px; background: var(--brand-gold); margin: 0 auto;"></div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-12">
-                <div class="bg-brand-cream p-12 rounded-[40px] border border-gold/10 hover-lift text-center">
-                    <div class="w-20 h-20 bg-white text-gold rounded-full flex items-center justify-center text-3xl mb-8 mx-auto shadow-sm">
-                        <i class="fas fa-user-doctor"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight">Clinical Derm</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Expert diagnosis and management of chronic skin conditions including Psoriasis, Eczema, and Acne Vulgaris.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;">
+
+                <div class="spec-card hover-lift">
+                    <div class="spec-icon"><i class="fas fa-user-doctor"></i></div>
+                    <h3 style="font-size: 0.85rem; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Clinical Dermatology</h3>
+                    <p style="font-size: 0.875rem; color: #888; line-height: 1.75; font-weight: 400;">Expert diagnosis and management of chronic skin conditions including Psoriasis, Eczema, and Acne Vulgaris.</p>
                 </div>
 
-                <div class="bg-brand-cream p-12 rounded-[40px] border border-gold/10 hover-lift text-center">
-                    <div class="w-20 h-20 bg-white text-gold rounded-full flex items-center justify-center text-3xl mb-8 mx-auto shadow-sm">
-                        <i class="fas fa-vial-virus"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight">Cosmetology</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Advanced aesthetic procedures from UK-standard training including Anti-Wrinkle Injections, Fillers, and Threads.</p>
+                <div class="spec-card hover-lift">
+                    <div class="spec-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <h3 style="font-size: 0.85rem; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Cosmetology</h3>
+                    <p style="font-size: 0.875rem; color: #888; line-height: 1.75; font-weight: 400;">Advanced aesthetic procedures from UK-standard training including Anti-Wrinkle Injections, Fillers, and Thread Lifts.</p>
                 </div>
 
-                <div class="bg-brand-cream p-12 rounded-[40px] border border-gold/10 hover-lift text-center">
-                    <div class="w-20 h-20 bg-white text-gold rounded-full flex items-center justify-center text-3xl mb-8 mx-auto shadow-sm">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight">Trichology</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Specialized solutions for hair thinning, Alopecia, and Scalp rejuvenation using state-of-the-art PRP technologies.</p>
+                <div class="spec-card hover-lift">
+                    <div class="spec-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <h3 style="font-size: 0.85rem; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Trichology</h3>
+                    <p style="font-size: 0.875rem; color: #888; line-height: 1.75; font-weight: 400;">Specialized solutions for hair thinning, Alopecia, and scalp rejuvenation using state-of-the-art PRP technologies.</p>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <<section class="py-24 bg-[#FDFBF7] px-6 text-center">
-    <div class="max-w-4xl mx-auto flex flex-col items-center">
-        
-        <h2 class="serif-font text-4xl md:text-5xl mb-6 tracking-tight" style="font-family: 'Playfair Display', serif; color: #D4AF37;">
-            EXPERIENCE PREMIUM CARE
-        </h2>
-        
-        <p class="text-gray-500 font-light mb-12 max-w-lg mx-auto leading-relaxed">
-            Consult with Dr. Sonam Bhatia to begin your journey toward lasting skin health and aesthetic confidence.
+    <section style="padding: 5rem 1.5rem; background: var(--brand-cream); text-align: center;">
+        <div style="max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+
+            <h2 class="serif-font" style="font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--brand-gold); letter-spacing: 0.04em; margin-bottom: 1.25rem; font-style: italic;">
+                Experience Premium Care
+            </h2>
+
+            <p style="font-size: 0.95rem; color: #888; font-weight: 300; line-height: 1.8; max-width: 420px; margin-bottom: 2.5rem;">
+                Consult with Dr. Sonam Bhatia to begin your journey toward lasting skin health and aesthetic confidence.
+            </p>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
+                <a href="index.html#booking" class="cta-btn-primary">Request Appointment</a>
+                <a href="https://wa.me/919321297553" class="cta-btn-secondary">
+                    <i class="fab fa-whatsapp" style="margin-right: 6px;"></i> Chat on WhatsApp
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <footer style="background: #0a0a0a; color: #666; padding: 2rem 1.5rem; text-align: center;">
+        <p style="font-size: 0.55rem; letter-spacing: 0.35em; text-transform: uppercase; margin: 0;">
+            © 2026 Skinnergy Cosmetic Care | Khadakpada, Kalyan
         </p>
-
-        <div class="flex flex-col items-center justify-center gap-5 w-full">
-            
-            <a href="index.html#booking" 
-               class="bg-[#D4AF37] text-black px-12 py-5 rounded-full font-bold shadow-xl hover:bg-black hover:text-white transition-all uppercase text-[11px] tracking-[0.2em] w-full max-w-[320px] inline-block">
-                Request Appointment
-            </a>
-            
-            <a href="https://wa.me/919321297553" 
-               class="border border-black text-black px-12 py-5 rounded-full font-bold hover:bg-black hover:text-white transition-all uppercase text-[11px] tracking-[0.2em] w-full max-w-[320px] inline-block">
-                Chat with Us
-            </a>
-            
-        </div>
-    </div>
-</section>
-
-    <footer class="bg-[#0a0a0a] text-gray-500 py-12 text-center">
-        <p class="text-[9px] uppercase tracking-[0.4em]">© 2026 Skinnergy Cosmetic Care | Khadakpada, Kalyan</p>
     </footer>
 
     <script>
+        // Hamburger toggle
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('active'));
+        const menuIcon = document.getElementById('menu-icon');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            menuIcon.classList.toggle('fa-bars');
+            menuIcon.classList.toggle('fa-xmark');
+        });
+
+        // Show desktop CTA on larger screens
+        function updateNav() {
+            const navCta = document.getElementById('nav-cta');
+            const desktopNav = document.querySelector('.desktop-nav');
+            if (window.innerWidth >= 1024) {
+                navCta.style.display = 'inline-block';
+                desktopNav.style.display = 'flex';
+                menuBtn.style.display = 'none';
+            } else if (window.innerWidth >= 768) {
+                navCta.style.display = 'inline-block';
+                desktopNav.style.display = 'none';
+                menuBtn.style.display = 'block';
+            } else {
+                navCta.style.display = 'none';
+                desktopNav.style.display = 'none';
+                menuBtn.style.display = 'block';
+            }
+        }
+        updateNav();
+        window.addEventListener('resize', updateNav);
     </script>
 </body>
 </html>
